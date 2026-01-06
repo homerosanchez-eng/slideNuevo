@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadena de Valor - Recuperación de Activos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide-container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slide-header {
+            background: linear-gradient(135deg, #1a3a8f 0%, #2d5cc2 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .slide-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        .slide-header h2 {
+            font-size: 1.3rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .value-chain {
+            padding: 40px;
+            position: relative;
+        }
+        
+        /* Línea vertical que conecta los eslabones */
+        .chain-line {
+            position: absolute;
+            left: 120px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #2d5cc2, #1a3a8f);
+            z-index: 1;
+        }
+        
+        .chain-link {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .link-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2d5cc2 0%, #1a3a8f 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-right: 30px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(45, 92, 194, 0.3);
+            position: relative;
+            left: 90px;
+        }
+        
+        .link-content {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #2d5cc2;
+            flex-grow: 1;
+            margin-left: 60px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .link-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .link-title {
+            color: #1a3a8f;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .link-title::before {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #ff6b00;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .link-details ul {
+            list-style-type: none;
+        }
+        
+        .link-details li {
+            padding: 8px 0;
+            font-size: 1.1rem;
+            color: #333;
+            position: relative;
+            padding-left: 24px;
+        }
+        
+        .link-details li::before {
+            content: "+";
+            color: #ff6b00;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+        
+        .conclusion-box {
+            background: linear-gradient(135deg, #f8f9ff 0%, #eef2ff 100%);
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin-top: 30px;
+            border-left: 5px solid #ff6b00;
+        }
+        
+        .conclusion-title {
+            color: #1a3a8f;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .conclusion-title::before {
+            content: "✓";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: #ff6b00;
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+        }
+        
+        .conclusion-text {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chain-line {
+                left: 50px;
+            }
+            
+            .link-number {
+                left: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .link-content {
+                margin-left: 30px;
+                padding: 20px;
+            }
+            
+            .slide-header h1 {
+                font-size: 2rem;
+            }
+            
+            .slide-header h2 {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .value-chain {
+                padding: 20px;
+            }
+            
+            .chain-line {
+                left: 35px;
+            }
+            
+            .link-number {
+                left: 5px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                margin-right: 15px;
+            }
+            
+            .link-content {
+                margin-left: 10px;
+                padding: 15px;
+            }
+            
+            .link-title {
+                font-size: 1.2rem;
+            }
+            
+            .link-details li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="slide-header">
+            <!-- <h1>CADENA DE VALOR</h1> -->
+            <h1>Transformación estratégica de activos</h1>
+        </div>
+        
+        <div class="value-chain">
+            <!-- Línea que conecta los eslabones -->
+            <div class="chain-line"></div>
+            
+            <!-- Eslabón 1 -->
+            <div class="chain-link">
+                <div class="link-number">1</div>
+                <div class="link-content">
+                    <div class="link-title">ACTIVO EN RIESGO</div>
+                    <div class="link-details">
+                        <ul>
+                            <li>Crédito activo, vencido e incobrable</li>
+                            <li>Pérdida potencial del 100% del valor</li>
+                            <li>Activo improductivo en cartera</li>
+                            <li>Exposición financiera total</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Eslabón 2 -->
+            <div class="chain-link">
+                <div class="link-number">2</div>
+                <div class="link-content">
+                    <div class="link-title">RECUPERACIÓN OPERATIVA</div>
+                    <div class="link-details">
+                        <ul>
+                            <li>Gestión y negociación con el cliente</li>
+                            <li>Recuperación física de la unidad</li>
+                            <li>Costo operativo del proceso</li>
+                            <li>Logística de traslado y almacenaje</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Eslabón 3 -->
+            <div class="chain-link">
+                <div class="link-number">3</div>
+                <div class="link-content">
+                    <div class="link-title">TRANSFORMACIÓN DEL ACTIVO</div>
+                    <div class="link-details">
+                        <ul>
+                            <li>Preparación para comercialización</li>
+                            <li>Ingreso a inventario de recuperados</li>
+                            <li>Valorización para venta</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Eslabón 4 -->
+            <div class="chain-link">
+                <div class="link-number">4</div>
+                <div class="link-content">
+                    <div class="link-title">GENERACIÓN DE VALOR DUAL</div>
+                    <div class="link-details">
+                        <ul>
+                            <li>Venta estratégica 30% contado / 70% crédito</li>
+                            <li>Flujo de caja inmediato en ventas de contado</li>
+                            <li>Generación de nueva cartera crediticia</li>
+                            <li>Reactivación del ciclo comercial</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Eslabón 5 -->
+            <div class="chain-link">
+                <div class="link-number">5</div>
+                <div class="link-content">
+                    <div class="link-title">RESULTADO ACUMULADO</div>
+                    <div class="link-details">
+                        <ul>
+                            <li>Pérdida evitada al 100%</li>
+                            <li>Capital recuperado y reactivado</li>
+                            <li>Flujo de caja positivo generado</li>
+                            <li>Nuevo activo crediticio creado</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conclusión -->
+            <div class="conclusion-box">
+                <div class="conclusion-title">IMPACTO ESTRATÉGICO DEL PROCESO</div>
+                <div class="conclusion-text">
+                    Una cadena que transforma riesgo en oportunidad, convirtiendo activos improductivos en flujo de caja inmediato y nueva cartera crediticia. Este proceso no solo mitiga pérdidas, sino que reinicia el ciclo comercial y fortalece la salud financiera de la institución.
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Área de Recuperación de Activos | Proceso de Gestión de Cartera Vencida
+        </div>
+    </div>
+    
+    <script>
+        // Añadir animación sutil al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const chainLinks = document.querySelectorAll('.chain-link');
+            
+            chainLinks.forEach((link, index) => {
+                link.style.opacity = '0';
+                link.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    link.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    link.style.opacity = '1';
+                    link.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body>
+</html>
